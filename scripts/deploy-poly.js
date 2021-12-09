@@ -8,7 +8,7 @@ async function main()
 {
     const TOKENCONTRACT_NAME = "ChildFaithTribe";
     const TOKEN_NAME = "Faith Tribe";
-    const TOKEN_SYMBOL = "FAITH";
+    const TOKEN_SYMBOL = "FTRB";
     let tx;
 
     signers= null;
