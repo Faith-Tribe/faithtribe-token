@@ -15,7 +15,7 @@ contract FaithTribe is ERC20Burnable, ERC20Snapshot, AccessControl {
     uint256 public immutable maxSupply;
 
     // accepts initial supply in whole numbers and adds decimal places of the token automatically
-    constructor(uint256 _maxSupply, address adminRole, address snapshotRole, address minterRole) ERC20("Faith Tribe", "FAITH") {
+    constructor(uint256 _maxSupply, address adminRole, address snapshotRole, address minterRole) ERC20("Faith Tribe", "FTRB") {
         _setupRole(DEFAULT_ADMIN_ROLE, adminRole);
         _setupRole(SNAPSHOT_ROLE, snapshotRole);
         _setupRole(MINTER_ROLE, minterRole);
