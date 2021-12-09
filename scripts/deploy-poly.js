@@ -6,8 +6,9 @@ BigNumber.config({ EXPONENTIAL_AT: 28 })
 
 async function main() 
 {
-    const TOKENCONTRACT_NAME = "FaithTribe";
-    const INITIAL_SUPPLY = new BigNumber("5000000000000000000000000000");
+    const TOKENCONTRACT_NAME = "ChildFaithTribe";
+    const TOKEN_NAME = "Faith Tribe";
+    const TOKEN_SYMBOL = "FTRB";
     let tx;
 
     signers= null;
@@ -21,10 +22,10 @@ async function main()
 
     deployerSigner = signers[0];
 
-    adminSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: gnosis safe admin vault // testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d // hardhat: 0x70997970c51812dc3a010c7d01b50e0d17dc79c8
-    snapshortSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault // testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
-    minterSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe // testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
-    
+    adminSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault, testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
+    snapshotSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault, testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
+    childManagerProxyAddress = '0xb5505a6d998549090530911180f38aC5130101c6'; // mainnet: 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa // mumbai: 0xb5505a6d998549090530911180f38aC5130101c6
+
     txnCount = await provider.getTransactionCount(signers[0].address);
     block = await provider.getBlock("latest");
     var gasLimit = block.gasLimit/block.transactions.length;
@@ -34,8 +35,9 @@ async function main()
     console.log("Gas Limit:", gasLimit);
 
     console.log("Admin signer: " + adminSignerAddress);
-    console.log("Minter signer: " + minterSignerAddress);
+    console.log("Snapshot signer: " + snapshotSignerAddress);
     console.log("Deployer signer: " + deployerSigner.address);
+    console.log("Child Manager proxy address: " + childManagerProxyAddress);
 
     //let overrides = {
     //    gasPrice: 100,
@@ -46,7 +48,7 @@ async function main()
     tokenContract = await ethers.getContractFactory(TOKENCONTRACT_NAME);
     console.log("...");
     
-    deployedTokenContract = await tokenContract.deploy(INITIAL_SUPPLY.toString(), adminSignerAddress, snapshortSignerAddress, minterSignerAddress/*, overrides*/);
+    deployedTokenContract = await tokenContract.deploy(TOKEN_NAME, TOKEN_SYMBOL, adminSignerAddress, snapshotSignerAddress, childManagerProxyAddress, /*, overrides*/);
 
     await deployedTokenContract.deployed();
     console.log("Token Contract address:", deployedTokenContract.address);
