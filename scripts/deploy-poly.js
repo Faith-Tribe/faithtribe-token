@@ -22,9 +22,9 @@ async function main()
 
     deployerSigner = signers[0];
 
-    adminSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet - set to gnosis safe vault, testnet - set to deployer
-    snapshotSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet - set to gnosis safe vault, testnet - set to deployer
-    childManagerProxyAddress = '0xb5505a6d998549090530911180f38aC5130101c6'; // mainnet=='0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa', mumbai=='0xb5505a6d998549090530911180f38aC5130101c6'
+    adminSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault, testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
+    snapshotSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault, testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
+    childManagerProxyAddress = '0xb5505a6d998549090530911180f38aC5130101c6'; // mainnet: 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa // mumbai: 0xb5505a6d998549090530911180f38aC5130101c6
 
     txnCount = await provider.getTransactionCount(signers[0].address);
     block = await provider.getBlock("latest");
