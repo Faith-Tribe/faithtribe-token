@@ -22,7 +22,6 @@ async function main()
 
     deployerSigner = signers[0];
 
-    adminSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault, testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
     snapshotSignerAddress = '0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d'; // mainnet: set to gnosis safe vault, testnet: 0xD24b8D8A65e0e55e64B7c9914db6F91D129aF28d
     childManagerProxyAddress = '0xb5505a6d998549090530911180f38aC5130101c6'; // mainnet: 0xA6FA4fB5f76172d178d61B04b0ecd319C5d1C0aa // mumbai: 0xb5505a6d998549090530911180f38aC5130101c6
 
@@ -34,7 +33,6 @@ async function main()
     console.log("Account balance:", (await signers[0].getBalance()).toString());
     console.log("Gas Limit:", gasLimit);
 
-    console.log("Admin signer: " + adminSignerAddress);
     console.log("Snapshot signer: " + snapshotSignerAddress);
     console.log("Deployer signer: " + deployerSigner.address);
     console.log("Child Manager proxy address: " + childManagerProxyAddress);
@@ -48,7 +46,7 @@ async function main()
     tokenContract = await ethers.getContractFactory(TOKENCONTRACT_NAME);
     console.log("...");
     
-    deployedTokenContract = await tokenContract.deploy(TOKEN_NAME, TOKEN_SYMBOL, adminSignerAddress, snapshotSignerAddress, childManagerProxyAddress, /*, overrides*/);
+    deployedTokenContract = await tokenContract.deploy(TOKEN_NAME, TOKEN_SYMBOL, snapshotSignerAddress, childManagerProxyAddress, /*, overrides*/);
 
     await deployedTokenContract.deployed();
     console.log("Token Contract address:", deployedTokenContract.address);

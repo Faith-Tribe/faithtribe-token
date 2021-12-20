@@ -12,8 +12,7 @@ contract ChildFaithTribe is ERC20Snapshot, AccessControlMixin, IChildToken, Nati
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
     bytes32 public constant DEPOSITER_ROLE = keccak256("DEPOSITER_ROLE");
 
-    constructor(string memory name_, string memory symbol_, address adminRole, address snapshotRole, address childChainManager) ERC20(name_, symbol_) {
-        _setupRole(DEFAULT_ADMIN_ROLE, adminRole);
+    constructor(string memory name_, string memory symbol_, address snapshotRole, address childChainManager) ERC20(name_, symbol_) {
         _setupRole(SNAPSHOT_ROLE, snapshotRole);
         _setupRole(DEPOSITER_ROLE, childChainManager);
         _setupContractId("ChildFaithTribe");
