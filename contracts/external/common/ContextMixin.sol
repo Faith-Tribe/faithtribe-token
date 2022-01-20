@@ -20,6 +20,5 @@ abstract contract ContextMixin {
         } else {
             sender = msg.sender;
         }
-        return sender;
     }
 }
