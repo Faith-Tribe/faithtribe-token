@@ -11,13 +11,24 @@ contract EIP712Base is Initializable {
         bytes32 salt;
     }
 
-    string constant public ERC712_VERSION = "1";
+    // Cache the domain separator as an immutable value, but also store the chain id that it corresponds to, in order to
+    // invalidate the cached domain separator if the chain id changes.
+    bytes32 private _CACHED_DOMAIN_SEPARATOR;
+    uint256 private _CACHED_CHAIN_ID;
+    address private _CACHED_THIS;
+
+    bytes32 private _HASHED_NAME;
+    bytes32 private _HASHED_VERSION;
+    bytes32 private _TYPE_HASH;
+
+    string public constant ERC712_VERSION = "1";
 
     bytes32 internal constant EIP712_DOMAIN_TYPEHASH = keccak256(
         bytes(
             "EIP712Domain(string name,string version,address verifyingContract,bytes32 salt)"
         )
     );
+    
     bytes32 internal domainSeperator;
 
     // supposed to be called once while initializing.
@@ -29,31 +40,33 @@ contract EIP712Base is Initializable {
         internal
         initializer
     {
-        _setDomainSeperator(name);
+        bytes32 hashedName = keccak256(bytes(name));
+        bytes32 hashedVersion = keccak256(bytes(ERC712_VERSION));
+        bytes32 typeHash = keccak256(
+            "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+        );
+        _HASHED_NAME = hashedName;
+        _HASHED_VERSION = hashedVersion;
+        _CACHED_CHAIN_ID = block.chainid;
+        _CACHED_DOMAIN_SEPARATOR = _buildDomainSeparator(typeHash, hashedName, hashedVersion);
+        _CACHED_THIS = address(this);
+        _TYPE_HASH = typeHash;
     }
 
-    function _setDomainSeperator(string memory name) internal {
-        domainSeperator = keccak256(
-            abi.encode(
-                EIP712_DOMAIN_TYPEHASH,
-                keccak256(bytes(name)),
-                keccak256(bytes(ERC712_VERSION)),
-                address(this),
-                bytes32(getChainId())
-            )
-        );
+    function _buildDomainSeparator(
+        bytes32 typeHash,
+        bytes32 nameHash,
+        bytes32 versionHash
+    ) private view returns (bytes32) {
+        return keccak256(abi.encode(typeHash, nameHash, versionHash, block.chainid, address(this)));
     }
 
     function getDomainSeperator() public view returns (bytes32) {
-        return domainSeperator;
-    }
-
-    function getChainId() public view returns (uint256) {
-        uint256 id;
-        assembly {
-            id := chainid()
+        if (address(this) == _CACHED_THIS && block.chainid == _CACHED_CHAIN_ID) {
+            return _CACHED_DOMAIN_SEPARATOR;
+        } else {
+            return _buildDomainSeparator(_TYPE_HASH, _HASHED_NAME, _HASHED_VERSION);
         }
-        return id;
     }
 
     /**
