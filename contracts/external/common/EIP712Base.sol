@@ -53,7 +53,7 @@ contract EIP712Base is Initializable {
         return keccak256(abi.encode(typeHash, nameHash, versionHash, block.chainid, address(this)));
     }
 
-    function getDomainSeperator() internal view returns (bytes32) {
+    function _getDomainSeperator() internal view returns (bytes32) {
         if (address(this) == _CACHED_THIS && block.chainid == _CACHED_CHAIN_ID) {
             return _CACHED_DOMAIN_SEPARATOR;
         } else {
@@ -75,7 +75,7 @@ contract EIP712Base is Initializable {
     {
         return
             keccak256(
-                abi.encodePacked("\x19\x01", getDomainSeperator(), messageHash)
+                abi.encodePacked("\x19\x01", _getDomainSeperator(), messageHash)
             );
     }
 }
